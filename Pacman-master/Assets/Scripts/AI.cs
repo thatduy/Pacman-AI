@@ -2,12 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 
-
+//Behavior Ghost: http://gameinternals.com/post/2072558330/understanding-pac-man-ghost-behavior
 public class AI : MonoBehaviour {
 
-	public Transform target;
+	public Transform target; //vi tri cua con pacman
 
-	private List<TileManager.Tile> tiles = new List<TileManager.Tile>();
+	private List<TileManager.Tile> tiles = new List<TileManager.Tile>(); // cái map để biết ngã tư, tường này nọ...
 	private TileManager manager;
 	public GhostMove ghost;
 
@@ -20,8 +20,8 @@ public class AI : MonoBehaviour {
 		manager = GameObject.Find("Game Manager").GetComponent<TileManager>();
 		tiles = manager.tiles;
 
-		if(ghost == null)	Debug.Log ("game object ghost not found");
-		if(manager == null)	Debug.Log ("game object Game Manager not found");
+		//if(ghost == null)	Debug.Log ("game object ghost not found");
+		//if(manager == null)	Debug.Log ("game object Game Manager not found");
 	}
 
 	public void AILogic()
@@ -177,7 +177,6 @@ public class AI : MonoBehaviour {
 			targetPos = new Vector3 (target.position.x+0.499f, target.position.y+0.499f) + 4*dir;
 
 			// if pacmans going up, not 4 ahead but 4 up and 4 left is the target
-			// read about it here: http://gameinternals.com/post/2072558330/understanding-pac-man-ghost-behavior
 			// so subtract 4 from X coord from target position
 			if(dir == Vector3.up)	targetPos -= new Vector3(4, 0, 0);
 

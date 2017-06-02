@@ -4,13 +4,17 @@ using System.Collections.Generic;
 using System.IO;
 
 public class TileManager : MonoBehaviour {
+	/*
+		Mô hình hóa cơ sở dữ liệu thành Tile, mỗi tile là một tọa độ x, y trên map
+		Các tile có mối quan hệ với nhau left,right,up,down;
+	*/
 	public class Tile
 	{
 		public int x { get; set; }
 		public int y { get; set; }
-		public bool occupied {get; set;}
-		public int adjacentCount {get; set;}
-		public bool isIntersection {get; set;}//nga tu
+		public bool occupied {get; set;}//xác định 1 tile có thể di chuyển tới trc đc nữa hay ko
+		public int adjacentCount {get; set;} // tổng số gạch liền kề
+		public bool isIntersection {get; set;}//ngã tư
 		
 		public Tile left,right,up,down;
 		
@@ -89,7 +93,7 @@ public class TileManager : MonoBehaviour {
                 {
                     Tile newTile = new Tile(X, Y);
 
-                    // if the tile we read is a valid tile (movable)
+					// Nếu ô hiện tại là đường đi (có thể đi đc)
                     if (line[i] == '1')
                     {
                         // check for left-right neighbor
@@ -97,15 +101,13 @@ public class TileManager : MonoBehaviour {
                         {
                             // assign each tile to the corresponding side of other tile
                             newTile.left = tiles[tiles.Count - 1];
-                            tiles[tiles.Count - 1].right = newTile;
+							tiles[tiles.Count - 1].right = newTile;// Tile bên trái có right là newTile
 
                             // adjust adjcent tile counts of each tile
                             newTile.adjacentCount++;
                             tiles[tiles.Count - 1].adjacentCount++;
                         }
-                    }
-
-                    // if the current tile is not movable
+                    }// if the current tile is not movable
                     else newTile.occupied = true;
 
                     // check for up-down neighbor, starting from second row (Y<30)
@@ -159,7 +161,7 @@ public class TileManager : MonoBehaviour {
 
 
 	//----------------------------------------------------------------------
-	// returns the index in the tiles list of a given tile's coordinates
+	// trả về vị trí của Tile trong list dựa vào tọa độ x, y
 	public int Index(int X, int Y)
 	{
 		// if the requsted index is in bounds
