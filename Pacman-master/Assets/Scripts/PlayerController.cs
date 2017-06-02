@@ -5,10 +5,10 @@ using System.Collections;
 public class PlayerController : MonoBehaviour
 {
 
-    public float speed = 0.4f;
-    Vector2 _dest = Vector2.zero;
-    Vector2 _dir = Vector2.zero;
-    Vector2 _nextDir = Vector2.zero;
+    public float speed = 0.4f;//toc do cua con pac, de public de tang toc do ung vs level
+    Vector2 _dest = Vector2.zero;// cai dich 
+    Vector2 _dir = Vector2.zero;// khoi tao vi tri 0,0 de lam gi?
+    Vector2 _nextDir = Vector2.zero;//huong di tiep theo
 
     [Serializable]
     public class PointSprites
@@ -100,7 +100,7 @@ public class PlayerController : MonoBehaviour
         GetComponent<Animator>().SetFloat("DirY", 0);
     }
 
-    void ReadInputAndMove()
+	void ReadInputAndMove()
     {
         // move closer to destination
         Vector2 p = Vector2.MoveTowards(transform.position, _dest, speed);

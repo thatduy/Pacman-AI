@@ -91,7 +91,7 @@ public class AI : MonoBehaviour {
 			ghost.direction = ghost.direction;	// setter updates the waypoint
 		}
 	}
-
+	//trang thai bi scatter, chay tron pacman
 	public void RunLogic()
 	{
 		// get current tile
@@ -173,7 +173,7 @@ public class AI : MonoBehaviour {
 			targetTile = tiles[manager.Index((int)targetPos.x, (int)targetPos.y)];
 			break;
 		case "pinky":	// target = pacman + 4*pacman's direction (4 steps ahead of pacman)
-			dir = target.GetComponent<PlayerController>().getDir();
+			dir = target.GetComponent<PlayerController>().getDir();//cho thang pacman dang dung
 			targetPos = new Vector3 (target.position.x+0.499f, target.position.y+0.499f) + 4*dir;
 
 			// if pacmans going up, not 4 ahead but 4 up and 4 left is the target
@@ -204,4 +204,5 @@ public class AI : MonoBehaviour {
 		}
 		return targetTile;
 	}
+		
 }

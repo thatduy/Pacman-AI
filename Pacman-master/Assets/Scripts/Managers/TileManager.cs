@@ -4,14 +4,13 @@ using System.Collections.Generic;
 using System.IO;
 
 public class TileManager : MonoBehaviour {
-
 	public class Tile
 	{
 		public int x { get; set; }
 		public int y { get; set; }
 		public bool occupied {get; set;}
 		public int adjacentCount {get; set;}
-		public bool isIntersection {get; set;}
+		public bool isIntersection {get; set;}//nga tu
 		
 		public Tile left,right,up,down;
 		
@@ -24,7 +23,7 @@ public class TileManager : MonoBehaviour {
 
 
 	};
-	
+	//mang du lieu, giong vector C++
 	public List<Tile> tiles = new List<Tile>();
 	
 	// Use this for initialization

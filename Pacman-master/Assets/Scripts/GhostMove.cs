@@ -90,7 +90,7 @@ public class GhostMove : MonoBehaviour {
 				break;
 
 			case State.Run:
-				RunAway();
+				//RunAway();
 				break;
 			}
 		}
@@ -118,6 +118,7 @@ public class GhostMove : MonoBehaviour {
     }
 	
 
+	//khoi tao duong di ban dau cho ghost
     private void InitializeWaypoints(State st)
     {
         //--------------------------------------------------
@@ -133,7 +134,9 @@ public class GhostMove : MonoBehaviour {
         string data = "";
         switch (name)
         {
+		//
         case "blinky":
+			//22 20 la toa do tren map, 15 la o chinh giua map
             data = @"22 20
 22 26
 
