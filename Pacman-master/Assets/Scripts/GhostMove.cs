@@ -67,7 +67,7 @@ public class GhostMove : MonoBehaviour {
 	void FixedUpdate ()
 	{
 	    DISTANCE = Vector3.Distance(transform.position, waypoint);
-
+		Debug.Log ("DISTANCE = "+ gameObject.name + DISTANCE);
 		if(GameManager.gameState == GameManager.GameState.Game){
 			animate ();
 
@@ -84,13 +84,13 @@ public class GhostMove : MonoBehaviour {
 			case State.Scatter:
 				Scatter();
 				break;
-
+				//duoi bat pacman
 			case State.Chase:
 				ChaseAI();
 				break;
-
+				//bo tron khoi pacman
 			case State.Run:
-				//RunAway();
+				RunAway();
 				break;
 			}
 		}
@@ -373,12 +373,14 @@ public class GhostMove : MonoBehaviour {
 	{
 
         // if not at waypoint, move towards it
-        if (Vector3.Distance(transform.position, waypoint) > 0.000000000001)
+		//transform.position la vi tri hien tai cua mot con ghost
+		//neu dang tren duong thang thi cu chay toi
+		if (Vector3.Distance(transform.position, waypoint) > 0.000000000001)
 		{
 			Vector2 p = Vector2.MoveTowards(transform.position, waypoint, speed);
 			GetComponent<Rigidbody2D>().MovePosition(p);
 		}
-
+		//neu dung tuong thi moi duoi bat pacman
 		// if at waypoint, run AI module
 		else GetComponent<AI>().AILogic();
 
