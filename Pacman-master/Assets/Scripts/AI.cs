@@ -42,6 +42,7 @@ public class AI : MonoBehaviour {
 		{
 			//---------------------
 			// IF WE BUMP INTO WALL
+			//CHạm vào tường
 			if(nextTile.occupied && !currentTile.isIntersection)
 			{
 				// if ghost moves to right or left and there is wall next tile
