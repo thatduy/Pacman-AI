@@ -5,15 +5,15 @@ using System.Collections.Generic;
 //Behavior Ghost: http://gameinternals.com/post/2072558330/understanding-pac-man-ghost-behavior
 public class AI : MonoBehaviour {
 
-	public Transform target; //vi tri cua con pacman
+	public Transform target; //vi tri cua con pacman theo tọa độ x, y --> để xác định tile
 
 	private List<TileManager.Tile> tiles = new List<TileManager.Tile>(); // cái map để biết ngã tư, tường này nọ...
 	private TileManager manager;
-	public GhostMove ghost;
+	public GhostMove ghost;//dùng để điểu khiển hướng di chuyển
 
-	public TileManager.Tile nextTile = null;
-	public TileManager.Tile targetTile;
-	TileManager.Tile currentTile;
+	public TileManager.Tile nextTile = null;//TIle tiếp theo s đi của ghost
+	public TileManager.Tile targetTile;//TILE của con pacman đang đứng
+	TileManager.Tile currentTile;//Tile hiện tại của 1 con ghost
 
 	void Awake()
 	{
@@ -26,6 +26,17 @@ public class AI : MonoBehaviour {
 
 	public void AILogic()
 	{
+		/*
+			NOTE: Chỉ thực hiện hàm A* khi ghost đang đứng ở giao lộ, vì lúc đó mới cần tính toán để biết rẽ trái hay phải
+			
+			mỗi giao lộ sẽ là 1 đỉnh trên đồ thị, tại vị trí ghost cần tìm các đỉnh gần kề( có kết nối )
+			sẽ tácinhs đc g(chiều dài đường đi) + h(khoảng cách từ giao lộ tới pacman, chim bay) = f (heuristic)
+			Khi tìm đc đỉnh tiếp theo cần đi, thì pacman đã ở vị trí khác, tuy v vẫn viết A* đầy đủ để phòng trường hợp pacman đứng yên 1 chỗ 
+			cần tìm đường đi toois ưu.
+
+			VIẾT ĐÚNG CHO TRƯỜNG HỢP PACMAN ĐỨNG YÊN 1 CHỖ LÀ OK
+			
+		*/
 		// get current tile
 		Vector3 currentPos = new Vector3(transform.position.x + 0.499f, transform.position.y + 0.499f);
 		currentTile = tiles[manager.Index ((int)currentPos.x, (int)currentPos.y)];
@@ -37,7 +48,8 @@ public class AI : MonoBehaviour {
 		if(ghost.direction.x < 0)	nextTile = tiles[manager.Index ((int)(currentPos.x-1), (int)currentPos.y)];
 		if(ghost.direction.y > 0)	nextTile = tiles[manager.Index ((int)currentPos.x, (int)(currentPos.y+1))];
 		if(ghost.direction.y < 0)	nextTile = tiles[manager.Index ((int)currentPos.x, (int)(currentPos.y-1))];
-		
+
+		//NGÃ 2 ONLY :)
 		if(nextTile.occupied || currentTile.isIntersection)
 		{
 			//---------------------
@@ -64,12 +76,23 @@ public class AI : MonoBehaviour {
 			}
 			
 			//---------------------------------------------------------------------------------------
-			// IF WE ARE AT INTERSECTION
+			// Nếu đang ở giao lộ
 			// calculate the distance to target from each available tile and choose the shortest one
 			if(currentTile.isIntersection)
 			{
 				
-				float dist1, dist2, dist3, dist4;
+				float dist1, dist2, dist3, dist4;// khoảng cách
+				TileManager.Tile tile = currentTile;
+				List<TileManager.Tile> open;
+
+				while (tile) {
+					if(currentTile.up != null && !currentTile.up.occupied && !(ghost.direction.y < 0)) 		tile = currentTile.up;
+					if(currentTile.down != null && !currentTile.down.occupied &&  !(ghost.direction.y > 0)) 	tile = currentTile.down;
+					if(currentTile.left != null && !currentTile.left.occupied && !(ghost.direction.x > 0)) 	tile = currentTile.left;
+					if(currentTile.right != null && !currentTile.right.occupied && !(ghost.direction.x < 0))	tile = currentTile.right;
+
+				}
+				//manager.tiles
 				dist1 = dist2 = dist3 = dist4 = 999999f;
 				if(currentTile.up != null && !currentTile.up.occupied && !(ghost.direction.y < 0)) 		dist1 = manager.distance(currentTile.up, targetTile);
 				if(currentTile.down != null && !currentTile.down.occupied &&  !(ghost.direction.y > 0)) 	dist2 = manager.distance(currentTile.down, targetTile);
