@@ -93,7 +93,7 @@ public class AI : MonoBehaviour {
 
 				while (open.Count != 0) {
 					//tìm tile có f nhỏ nhấy trong open
-					float MIN = 9999999;
+					float MIN = 9999999f;
 					for(int i = 0; i < open.Count; i++){
 						if (open [i].f < MIN) {
 							MIN = open [i].f;
@@ -101,8 +101,8 @@ public class AI : MonoBehaviour {
 						}
 					}
 					//Debug.Log ("Van con chay nek" + open.Count);
-					if (targetTile.x == currentTile.x || targetTile.y == currentTile.y) {
-						//Debug.Log ("Sai con me no roi");
+					if (targetTile.x == currentTile.x && targetTile.y == currentTile.y) {
+						//Debug.Log ("Sai con me no roi" + currentTile.x + "" + currentTile.y);
 						break;
 					}
 					//thêm zô close and xóa trong open
@@ -113,31 +113,37 @@ public class AI : MonoBehaviour {
 					//Tìm đỉnh kề cho tile hiện tại và them vào open
 					//currentTile has left, right, up, down. At least 3 relation exist
 					TileManager.Tile p = currentTile;
-					Debug.Log ("Toa do p-left:" + currentTile.left.x);
+
 					if (p.left != null) {
 						//hoac giao lo, hoac goc vuong
-
-						while (!p.isIntersection || !p.left.occupied) {
-							Debug.Log ("nga ba ben trai dau tien p:" + p.x + "" + p.y);
-							p = p.left;
+						p = p.left;
+						while (p.adjacentCount < 2) {
+							//Debug.Log ("nga ba ben trai dau tien p:" + p.x + "" + p.y);
+							if (p.left == null) {
+								break;
+							} else {
+								p = p.left;
+							}
 						}
-						//Debug.Log ("nga ba ben trai dau tien p:" + p.x + "" + p.y);
+
 						//kiem tra co close, open, phai co 3 cai if
 						//neu p chua co trong close va open
 						if (!open.Contains (p) && !close.Contains (p)) {
 							///tim duoc toi intersection hoac dung tuong
+							p.before = currentTile;
 							p.g = manager.distance(currentTile, p) + p.before.g;
 							p.h = manager.distance(targetTile, p);
 							p.f = p.g + p.h;
-							p.before = currentTile;
+
 							open.Add (p);
 
 						}
 						//neu den dc p voi path ngan hon, cap nhat lai p trong open
 						if (open.Contains (p) && p.g > currentTile.g + manager.distance(currentTile, p )) {
+							p.before = currentTile;
 							p.g = currentTile.g + manager.distance (currentTile, p);
 							p.f = p.g + p.h;
-							p.before = currentTile;
+
 						}
 						//neu p ton tai trong close, co path ngan hon
 						if (close.Contains (p) && p.g > currentTile.g + manager.distance(currentTile, p)) {
@@ -153,20 +159,99 @@ public class AI : MonoBehaviour {
 						}
 
 					}
-
-					if (currentTile.right != null) {
-						while (!p.isIntersection || !p.right.occupied) {
-							p = p.right;
+					p = currentTile;
+					//Debug.Log ("adjacentCount p-right:" + p.adjacentCount);
+					if (p.right != null) {
+						p = p.right;
+						while (p.adjacentCount < 2) {
+							//Debug.Log ("nga ba ben phai dau tien p:" + p.right.x + "" + p.right.y);
+							if (p.right == null) {
+								break;
+							} else {
+								p = p.right;
+							}
 						}
 
 						//kiem tra co close, open, phai co 3 cai if
 						//neu p chua co trong close va open
 						if (!open.Contains (p) && !close.Contains (p)) {
 							///tim duoc toi intersection hoac dung tuong
+						    p.before = currentTile;
 							p.g = manager.distance(currentTile, p) + p.before.g;
 							p.h = manager.distance(targetTile, p);
 							p.f = p.g + p.h;
+
+							open.Add (p);
+
+						}
+						//neu den dc p voi path ngan hon, cap nhat lai p trong open
+						if (open.Contains (p) && p.g > currentTile.g + manager.distance(currentTile, p )) {
 							p.before = currentTile;
+							p.g = currentTile.g + manager.distance (currentTile, p);
+							p.f = p.g + p.h;
+
+						}
+						//neu p ton tai trong close, co path ngan hon
+						if (close.Contains (p) && p.g > currentTile.g + manager.distance(currentTile, p)) {
+							
+
+						}
+					}
+					p = currentTile;
+					if (p.up != null) {
+						p = p.up;
+						while (p.adjacentCount < 2) {
+							if (p.up == null) {
+								break;
+							} else {
+								p = p.up;
+							}
+						}
+
+						//kiem tra co close, open, phai co 3 cai if
+						//neu p chua co trong close va open
+						if (!open.Contains (p) && !close.Contains (p)) {
+							///tim duoc toi intersection hoac dung tuong
+							p.before = currentTile;
+							p.g = manager.distance(currentTile, p) + p.before.g;
+							p.h = manager.distance(targetTile, p);
+							p.f = p.g + p.h;
+
+							open.Add (p);
+
+						}
+						//neu den dc p voi path ngan hon, cap nhat lai p trong open
+						if (open.Contains (p) && p.g > currentTile.g + manager.distance(currentTile, p )) {
+							p.g = currentTile.g + manager.distance (currentTile, p);
+							p.f = p.g + p.h;
+							p.before = currentTile;
+						}
+						//neu p ton tai trong close, co path ngan hon
+						if (close.Contains (p) && p.g > currentTile.g + manager.distance(currentTile, p)) {
+							
+
+						}
+					}
+					p = currentTile;
+					if (p.down != null) {
+						p = p.down;
+						while (p.adjacentCount < 2) {
+							if (p.down == null) {
+								break;
+							} else {
+								p = p.down;
+							}
+						}
+
+						//kiem tra co close, open, phai co 3 cai if
+						//neu p chua co trong close va open
+						if (!open.Contains (p) && !close.Contains (p)) {
+							///tim duoc toi intersection hoac dung tuong
+							p.before = currentTile;
+							p.g = manager.distance(currentTile, p) + p.before.g;
+							p.h = manager.distance(targetTile, p);
+							p.f = p.g + p.h;
+
 							open.Add (p);
 
 						}
@@ -183,68 +268,10 @@ public class AI : MonoBehaviour {
 						}
 					}
 
-					if (currentTile.up != null) {
-						while (!p.isIntersection || !p.up.occupied) {
-							p = p.up;
-						}
-
-						//kiem tra co close, open, phai co 3 cai if
-						//neu p chua co trong close va open
-						if (!open.Contains (p) && !close.Contains (p)) {
-							///tim duoc toi intersection hoac dung tuong
-							p.g = manager.distance(currentTile, p) + p.before.g;
-							p.h = manager.distance(targetTile, p);
-							p.f = p.g + p.h;
-							p.before = currentTile;
-							open.Add (p);
-
-						}
-						//neu den dc p voi path ngan hon, cap nhat lai p trong open
-						if (open.Contains (p) && p.g > currentTile.g + manager.distance(currentTile, p )) {
-							p.g = currentTile.g + manager.distance (currentTile, p);
-							p.f = p.g + p.h;
-							p.before = currentTile;
-						}
-						//neu p ton tai trong close, co path ngan hon
-						if (close.Contains (p) && p.g > currentTile.g + manager.distance(currentTile, p)) {
-							
-
-						}
-					}
-
-					if (currentTile.down != null) {
-						while (!p.isIntersection || !p.down.occupied) {
-							p = p.down;
-						}
-
-						//kiem tra co close, open, phai co 3 cai if
-						//neu p chua co trong close va open
-						if (!open.Contains (p) && !close.Contains (p)) {
-							///tim duoc toi intersection hoac dung tuong
-							p.g = manager.distance(currentTile, p) + p.before.g;
-							p.h = manager.distance(targetTile, p);
-							p.f = p.g + p.h;
-							p.before = currentTile;
-							open.Add (p);
-
-						}
-						//neu den dc p voi path ngan hon, cap nhat lai p trong open
-						if (open.Contains (p) && p.g > currentTile.g + manager.distance(currentTile, p )) {
-							p.g = currentTile.g + manager.distance (currentTile, p);
-							p.f = p.g + p.h;
-							p.before = currentTile;
-						}
-						//neu p ton tai trong close, co path ngan hon
-						if (close.Contains (p) && p.g > currentTile.g + manager.distance(currentTile, p)) {
-							
-
-						}
-					}
-					break;
 				}
 				//het vong while, currentTile = targetTile, da co duong di
-
-				while (saveCurrentTile != currentTile.before) {
+				Debug.Log(close.Count);
+				while (saveCurrentTile.h != currentTile.before.h) {
 					currentTile = currentTile.before;
 				}
 				//neu nam treen truc dung
