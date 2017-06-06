@@ -12,17 +12,22 @@ public class TileManager : MonoBehaviour {
 	{
 		public int x { get; set; }
 		public int y { get; set; }
+		public float f{ get; set; }//f của heurisic: f = g + h;
+		public float g{ get; set; }//distance between 2 tiles
+		public float h{ get; set; }//distance between current tile and pacman ( bird fly)
 		public bool occupied {get; set;}//xác định 1 tile có thể di chuyển tới trc đc nữa hay ko
 		public int adjacentCount {get; set;} // tổng số gạch liền kề
 		public bool isIntersection {get; set;}//ngã tư
 		
-		public Tile left,right,up,down;
+		public Tile left, right, up, down, before;//before la Tile 
+
+
 		
 		public Tile(int x_in, int y_in)
 		{
 			x = x_in; y = y_in;
 			occupied = false;
-			left = right = up = down = null;
+			left = right = up = down = before = null;
 		}
 
 

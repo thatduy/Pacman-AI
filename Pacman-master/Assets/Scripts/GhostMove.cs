@@ -384,7 +384,7 @@ public class GhostMove : MonoBehaviour {
 		//neu dung tuong thi moi duoi bat pacman hoac o nga 3, nga 4 moi
 		// if at waypoint, run AI module
 		else {
-			Debug.Log (gameObject.name + " at waypoint" + transform.position.x + " " + transform.position.y);
+			//Debug.Log (gameObject.name + " at waypoint" + transform.position.x + " " + transform.position.y);
 			GetComponent<AI> ().AILogic ();
 		}
 
