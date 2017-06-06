@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour {
     private GameObject inky;
     private GameObject clyde;
     private GameGUINavigation gui;
-
+	private MenuNavigation menu;
 	public static bool scared;
     static public int score;
 
@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour {
         ResetVariables();
 
 
-        // Adjust Ghost variables!
+        //tang toc do khi len level
         clyde.GetComponent<GhostMove>().speed += Level * SpeedPerLevel;
         blinky.GetComponent<GhostMove>().speed += Level * SpeedPerLevel;
         pinky.GetComponent<GhostMove>().speed += Level * SpeedPerLevel;
@@ -171,6 +171,13 @@ public class GameManager : MonoBehaviour {
     public void LoseLife()
     {
         lives--;
+		Debug.Log (lives);
+		if (lives == 0) {
+			//gui.H_ShowGameOverScreen ();
+			menu.HighScores ();
+			return;
+
+		}
         gameState = GameState.Dead;
     
         // update UI too

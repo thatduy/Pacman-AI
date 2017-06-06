@@ -70,7 +70,7 @@ public class GhostMove : MonoBehaviour {
 	//	Debug.Log ("gameState = "+ state);
 		if(GameManager.gameState == GameManager.GameState.Game){
 			animate ();
-
+//			Debug.Log (state);
 			switch(state)
 			{
 			case State.Wait:

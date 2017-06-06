@@ -16,7 +16,7 @@ public class TileManager : MonoBehaviour {
 		public float g{ get; set; }//distance between 2 tiles
 		public float h{ get; set; }//distance between current tile and pacman ( bird fly)
 		public bool occupied {get; set;}//xác định 1 tile có thể di chuyển tới trc đc nữa hay ko
-		public int adjacentCount {get; set;} // tổng số gạch liền kề
+		public int adjacentCount {get; set;} // tổng số gạch liền kề, nga 3 hay nga 4
 		public bool isIntersection {get; set;}//ngã tư
 		
 		public Tile left, right, up, down, before;//before la Tile 
