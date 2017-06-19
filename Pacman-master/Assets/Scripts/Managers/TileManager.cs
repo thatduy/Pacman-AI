@@ -10,14 +10,14 @@ public class TileManager : MonoBehaviour {
 	*/
 	public class Tile
 	{
-		public int x { get; set; }
-		public int y { get; set; }
+		public int x { get; set; }//toa do x
+		public int y { get; set; }//toa do y
 		public float f{ get; set; }//f của heurisic: f = g + h;
 		public float g{ get; set; }//distance between 2 tiles
 		public float h{ get; set; }//distance between current tile and pacman ( bird fly)
-		public bool occupied {get; set;}//xác định 1 tile có thể di chuyển tới trc đc nữa hay ko
+		public bool occupied {get; set;}//xác định 1 tile co phai la wall hay ko
 		public int adjacentCount {get; set;} // tổng số gạch liền kề, nga 3 hay nga 4
-		public bool isIntersection {get; set;}//ngã tư
+		public bool isIntersection {get; set;}//la giao lo?
 		
 		public Tile left, right, up, down, before;//before la Tile 
 

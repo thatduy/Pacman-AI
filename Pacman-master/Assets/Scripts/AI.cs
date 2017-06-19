@@ -76,7 +76,7 @@ public class AI : MonoBehaviour {
 			}
 			
 			//---------------------------------------------------------------------------------------
-			// Nếu đang ở giao lộ
+			// Nếu đang ở giao lộ0o,.p/i0k0iiiiiiiiiiiiiiiiiiiiiiiiiii0k0
 			// calculate the distance to target from each available tile and choose the shortest one
 			if(currentTile.isIntersection)
 			{
@@ -149,13 +149,13 @@ public class AI : MonoBehaviour {
 						if (close.Contains (p) && p.g > currentTile.g + manager.distance(currentTile, p)) {
 							Debug.Log ("Update close");
 							//break;
-							/*close.Remove (p);
+							close.Remove (p);
 							p.g = manager.distance(currentTile, p) + p.before.g;
 							p.h = manager.distance(targetTile, p);
 							p.f = p.g + p.h;
 							p.before = currentTile;
 
-							open.Add (p);*/
+							open.Add (p);
 
 						}
 
@@ -316,26 +316,24 @@ public class AI : MonoBehaviour {
 	//trang thai bi scatter, chay tron pacman
 	public void RunLogic()
 	{
-		// get current tile
+		// toa do hien tai cua ghost
 		Vector3 currentPos = new Vector3(transform.position.x + 0.499f, transform.position.y + 0.499f);
 		currentTile = tiles[manager.Index ((int)currentPos.x, (int)currentPos.y)];
 
-		// get the next tile according to direction
+		// get tile tiep theo dua vao huong di cua ghost hien tai
 		if(ghost.direction.x > 0)	nextTile = tiles[manager.Index ((int)(currentPos.x+1), (int)currentPos.y)];
 		if(ghost.direction.x < 0)	nextTile = tiles[manager.Index ((int)(currentPos.x-1), (int)currentPos.y)];
 		if(ghost.direction.y > 0)	nextTile = tiles[manager.Index ((int)currentPos.x, (int)(currentPos.y+1))];
 		if(ghost.direction.y < 0)	nextTile = tiles[manager.Index ((int)currentPos.x, (int)(currentPos.y-1))];
 
-		//Debug.Log (ghost.direction.x + " " + ghost.direction.y);
-		//Debug.Log (ghost.name + ": Next Tile (" + nextTile.x + ", " + nextTile.y + ")" );
 
 		if(nextTile.occupied || currentTile.isIntersection)
 		{
 			//---------------------
-			// IF WE BUMP INTO WALL
+			// neu next la tuong
 			if(nextTile.occupied && !currentTile.isIntersection)
 			{
-				// if ghost moves to right or left and there is wall next tile
+				//di chuyen qua trai, qua phai va dung wall
 				if(ghost.direction.x != 0)
 				{
 					if(currentTile.down == null)	ghost.direction = Vector3.up;
@@ -343,7 +341,7 @@ public class AI : MonoBehaviour {
 					
 				}
 				
-				// if ghost moves to up or down and there is wall next tile
+				// di chuyen len , xuong dung wall
 				else if(ghost.direction.y != 0)
 				{
 					if(currentTile.left == null)	ghost.direction = Vector3.right; 
@@ -354,10 +352,10 @@ public class AI : MonoBehaviour {
 			}
 			
 			//---------------------------------------------------------------------------------------
-			// IF WE ARE AT INTERSECTION
-			// choose one available option at random
+			// neu dang o giao lo, nga 3, nga 4
 			if(currentTile.isIntersection)
 			{
+				//
 				float dist1, dist2, dist3, dist4;// khoảng cách
 				/*List<TileManager.Tile> availableTiles = new List<TileManager.Tile>();
 				TileManager.Tile chosenTile;
@@ -366,10 +364,19 @@ public class AI : MonoBehaviour {
 				if(currentTile.left != null && !currentTile.left.occupied && !(ghost.direction.x > 0)) 		availableTiles.Add (currentTile.left);
 				if(currentTile.right != null && !currentTile.right.occupied && !(ghost.direction.x < 0))	availableTiles.Add (currentTile.right);*/
 				dist1 = dist2 = dist3 = dist4 = 0f;
-				if(currentTile.up != null && !currentTile.up.occupied && !(ghost.direction.y < 0)) 		dist1 = manager.distance(currentTile.up, targetTile);
-				if(currentTile.down != null && !currentTile.down.occupied &&  !(ghost.direction.y > 0)) 	dist2 = manager.distance(currentTile.down, targetTile);
-				if(currentTile.left != null && !currentTile.left.occupied && !(ghost.direction.x > 0)) 	dist3 = manager.distance(currentTile.left, targetTile);
-				if(currentTile.right != null && !currentTile.right.occupied && !(ghost.direction.x < 0))	dist4 = manager.distance(currentTile.right, targetTile);
+				if (currentTile.up != null && !currentTile.up.occupied && !(ghost.direction.y < 0) && targetTile != null) {
+					if (currentTile.up == null) {
+						Debug.Log ("currentTile.up == null");
+					}
+					if (targetTile == null) {
+						Debug.Log ("targetTile == null");
+					}
+					dist1 = manager.distance(currentTile.up, targetTile);
+				}
+					
+				if(currentTile.down != null && !currentTile.down.occupied &&  !(ghost.direction.y > 0) && targetTile != null) 	dist2 = manager.distance(currentTile.down, targetTile);
+				if(currentTile.left != null && !currentTile.left.occupied && !(ghost.direction.x > 0) && targetTile != null) 	dist3 = manager.distance(currentTile.left, targetTile);
+				if(currentTile.right != null && !currentTile.right.occupied && !(ghost.direction.x < 0) && targetTile != null)	dist4 = manager.distance(currentTile.right, targetTile);
 				
 				float max = Mathf.Max(dist1, dist2, dist3, dist4);
 				if(max == dist1) ghost.direction = Vector3.up;
