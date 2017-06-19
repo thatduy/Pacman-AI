@@ -81,7 +81,7 @@ public class AI : MonoBehaviour {
 			if(currentTile.isIntersection)
 			{
 				
-				float dist1, dist2, dist3, dist4;// khoảng cách
+
 
 				List<TileManager.Tile> open = new List<TileManager.Tile> ();
 				List<TileManager.Tile> close = new List<TileManager.Tile> ();
@@ -147,6 +147,7 @@ public class AI : MonoBehaviour {
 						}
 						//neu p ton tai trong close, co path ngan hon
 						if (close.Contains (p) && p.g > currentTile.g + manager.distance(currentTile, p)) {
+							Debug.Log ("Update close");
 							//break;
 							/*close.Remove (p);
 							p.g = manager.distance(currentTile, p) + p.before.g;
@@ -193,7 +194,7 @@ public class AI : MonoBehaviour {
 						}
 						//neu p ton tai trong close, co path ngan hon
 						if (close.Contains (p) && p.g > currentTile.g + manager.distance(currentTile, p)) {
-							
+							Debug.Log ("Update close");
 
 						}
 					}
@@ -228,7 +229,7 @@ public class AI : MonoBehaviour {
 						}
 						//neu p ton tai trong close, co path ngan hon
 						if (close.Contains (p) && p.g > currentTile.g + manager.distance(currentTile, p)) {
-							
+							Debug.Log ("Update close");
 
 						}
 					}
@@ -263,7 +264,7 @@ public class AI : MonoBehaviour {
 						}
 						//neu p ton tai trong close, co path ngan hon
 						if (close.Contains (p) && p.g > currentTile.g + manager.distance(currentTile, p)) {
-							
+							Debug.Log ("Update close");
 
 						}
 					}
@@ -288,7 +289,7 @@ public class AI : MonoBehaviour {
 					}
 				}
 
-
+				//code cũ của nó nè cô ahihi.....
 				//manager.tiles
 				/*dist1 = dist2 = dist3 = dist4 = 999999f;
 				if(currentTile.up != null && !currentTile.up.occupied && !(ghost.direction.y < 0)) 		dist1 = manager.distance(currentTile.up, targetTile);
@@ -357,16 +358,27 @@ public class AI : MonoBehaviour {
 			// choose one available option at random
 			if(currentTile.isIntersection)
 			{
-				List<TileManager.Tile> availableTiles = new List<TileManager.Tile>();
+				float dist1, dist2, dist3, dist4;// khoảng cách
+				/*List<TileManager.Tile> availableTiles = new List<TileManager.Tile>();
 				TileManager.Tile chosenTile;
 				if(currentTile.up != null && !currentTile.up.occupied && !(ghost.direction.y < 0)) 			availableTiles.Add (currentTile.up);
 				if(currentTile.down != null && !currentTile.down.occupied &&  !(ghost.direction.y > 0)) 	availableTiles.Add (currentTile.down);	
 				if(currentTile.left != null && !currentTile.left.occupied && !(ghost.direction.x > 0)) 		availableTiles.Add (currentTile.left);
-				if(currentTile.right != null && !currentTile.right.occupied && !(ghost.direction.x < 0))	availableTiles.Add (currentTile.right);
-
-				int rand = Random.Range(0, availableTiles.Count);
-				chosenTile = availableTiles[rand];
-				ghost.direction = Vector3.Normalize(new Vector3(chosenTile.x - currentTile.x, chosenTile.y - currentTile.y, 0));
+				if(currentTile.right != null && !currentTile.right.occupied && !(ghost.direction.x < 0))	availableTiles.Add (currentTile.right);*/
+				dist1 = dist2 = dist3 = dist4 = 0f;
+				if(currentTile.up != null && !currentTile.up.occupied && !(ghost.direction.y < 0)) 		dist1 = manager.distance(currentTile.up, targetTile);
+				if(currentTile.down != null && !currentTile.down.occupied &&  !(ghost.direction.y > 0)) 	dist2 = manager.distance(currentTile.down, targetTile);
+				if(currentTile.left != null && !currentTile.left.occupied && !(ghost.direction.x > 0)) 	dist3 = manager.distance(currentTile.left, targetTile);
+				if(currentTile.right != null && !currentTile.right.occupied && !(ghost.direction.x < 0))	dist4 = manager.distance(currentTile.right, targetTile);
+				
+				float max = Mathf.Max(dist1, dist2, dist3, dist4);
+				if(max == dist1) ghost.direction = Vector3.up;
+				if(max == dist2) ghost.direction = Vector3.down;
+				if(max == dist3) ghost.direction = Vector3.left;
+				if(max == dist4) ghost.direction = Vector3.right;
+				//int rand = Random.Range(0, availableTiles.Count);
+				//chosenTile = availableTiles[rand];
+				//ghost.direction = Vector3.Normalize(new Vector3(chosenTile.x - currentTile.x, chosenTile.y - currentTile.y, 0));
 				//Debug.Log (ghost.name + ": Chosen Tile (" + chosenTile.x + ", " + chosenTile.y + ")" );
 			}
 			
@@ -406,10 +418,14 @@ public class AI : MonoBehaviour {
 			break;
 
 		case "inky":	// target = ambushVector(pacman+2 - blinky) added to pacman+2
-			dir = target.GetComponent<PlayerController>().getDir();
+			dir = target.GetComponent<PlayerController> ().getDir ();
 			Vector3 blinkyPos = GameObject.Find ("blinky").transform.position;
-		    Vector3 ambushVector = target.position + 2*dir - blinkyPos ;
-			targetPos = new Vector3 (target.position.x+0.499f, target.position.y+0.499f) + 2*dir + ambushVector;
+			Vector3 ambushVector = target.position + 2 * dir - blinkyPos;
+			targetPos = new Vector3 (target.position.x + 0.499f, target.position.y + 0.499f) + 2 * dir + ambushVector;
+
+			Debug.Log ("target x = " + target.position.x + "target y = " + target.position.y);
+			Debug.Log ("blinkyPos x = " + blinkyPos.x + "blinkyPos y = " + blinkyPos.y);
+			Debug.Log ("ambushVector x = " + ambushVector.x + "ambushVector y = " + ambushVector.y);
 			targetTile = tiles[manager.Index((int)targetPos.x, (int)targetPos.y)];
 			break;
 		case "clyde":

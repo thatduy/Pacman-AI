@@ -172,12 +172,6 @@ public class GameManager : MonoBehaviour {
     {
         lives--;
 		Debug.Log (lives);
-		if (lives == 0) {
-			//gui.H_ShowGameOverScreen ();
-			menu.HighScores ();
-			return;
-
-		}
         gameState = GameState.Dead;
     
         // update UI too
