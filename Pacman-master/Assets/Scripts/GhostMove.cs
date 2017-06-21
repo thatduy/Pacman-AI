@@ -7,10 +7,10 @@ public class GhostMove : MonoBehaviour {
 
     // ----------------------------
     // Navigation variables
-	private Vector3 waypoint;			// AI-determined waypoint
-	private Queue<Vector3> waypoints;	// waypoints used on Init and Scatter states
+	private Vector3 waypoint;			// xác định đường đi
+	private Queue<Vector3> waypoints;	// đường đi dùng khi khởi tạo và chế độ bị đuổi
 
-	// direction is set from the AI component
+	// hướng đi được thiết lập bởi AILogic
 	public Vector3 _direction;
 	public Vector3 direction 
 	{
@@ -32,7 +32,6 @@ public class GhostMove : MonoBehaviour {
 	public float speed = 0.3f;
 
     // ----------------------------
-    // Ghost mode variables
 	public float scatterLength = 5f;
 	public float waitLength = 0.0f;
 
@@ -48,13 +47,12 @@ public class GhostMove : MonoBehaviour {
     private float _toggleInterval;
     private bool isWhite = false;
 
-	// handles
 	public GameGUINavigation GUINav;
     public PlayerController pacman;
     private GameManager _gm;
 
 	//-----------------------------------------------------------------------------------------
-	// variables end, functions begin
+	// biến end game, hàm bắt đầu
 	void Start()
 	{
 	    _gm = GameObject.Find("Game Manager").GetComponent<GameManager>();
@@ -374,16 +372,16 @@ public class GhostMove : MonoBehaviour {
 
         // if not at waypoint, move towards it
 		//transform.position la vi tri hien tai cua mot con ghost
-		//neu dang tren duong thang thi cu chay toi
+		//neu dang tren duong thang thi cu chay toi, chua trung voi o da chia
 		if (Vector3.Distance (transform.position, waypoint) > 0.000000000001) {
-			//Debug.Log (gameObject.name + " not at waypoint");
+			//Debug.Log (gameObject.name + " not at waypoint " + waypoint.x + " " + waypoint.y);
 			Vector2 p = Vector2.MoveTowards (transform.position, waypoint, speed);
 			GetComponent<Rigidbody2D> ().MovePosition (p);
 		}
-
-		//neu dung tuong thi moi duoi bat pacman hoac o nga 3, nga 4 moi
+			
 		// if at waypoint, run AI module
 		else {
+			//Debug.Log (gameObject.name + " at waypoint " + waypoint.x + " " + waypoint.y);
 			//Debug.Log (gameObject.name + " at waypoint" + transform.position.x + " " + transform.position.y);
 			GetComponent<AI> ().AILogic ();
 		}

@@ -26,18 +26,8 @@ public class AI : MonoBehaviour {
 
 	public void AILogic()
 	{
-		/*
-			NOTE: Chỉ thực hiện hàm A* khi ghost đang đứng ở giao lộ, vì lúc đó mới cần tính toán để biết rẽ trái hay phải
-			
-			mỗi giao lộ sẽ là 1 đỉnh trên đồ thị, tại vị trí ghost cần tìm các đỉnh gần kề( có kết nối )
-			sẽ tácinhs đc g(chiều dài đường đi) + h(khoảng cách từ giao lộ tới pacman, chim bay) = f (heuristic)
-			Khi tìm đc đỉnh tiếp theo cần đi, thì pacman đã ở vị trí khác, tuy v vẫn viết A* đầy đủ để phòng trường hợp pacman đứng yên 1 chỗ 
-			cần tìm đường đi toois ưu.
 
-			VIẾT ĐÚNG CHO TRƯỜNG HỢP PACMAN ĐỨNG YÊN 1 CHỖ LÀ OK
-			
-		*/
-		// get current tile
+		// get current tile of ghost
 		Vector3 currentPos = new Vector3(transform.position.x + 0.499f, transform.position.y + 0.499f);
 		currentTile = tiles[manager.Index ((int)currentPos.x, (int)currentPos.y)];
 		
@@ -49,15 +39,14 @@ public class AI : MonoBehaviour {
 		if(ghost.direction.y > 0)	nextTile = tiles[manager.Index ((int)currentPos.x, (int)(currentPos.y+1))];
 		if(ghost.direction.y < 0)	nextTile = tiles[manager.Index ((int)currentPos.x, (int)(currentPos.y-1))];
 
-		//NGÃ 2 ONLY :)
+		//o tiep theo phai di chuyen duoc
 		if(nextTile.occupied || currentTile.isIntersection)
 		{
 			//---------------------
-			// IF WE BUMP INTO WALL
-			//CHạm vào tường
+			//Chạm vào tường nga 2
 			if(nextTile.occupied && !currentTile.isIntersection)
 			{
-				// if ghost moves to right or left and there is wall next tile
+				// nếu đụng tường khi đang di chuyển sang ngang
 				if(ghost.direction.x != 0)
 				{
 					if(currentTile.down == null)	ghost.direction = Vector3.up;
@@ -65,7 +54,7 @@ public class AI : MonoBehaviour {
 					
 				}
 				
-				// if ghost moves to up or down and there is wall next tile
+				// nếu đụng tường khi di chuyển đứng
 				else if(ghost.direction.y != 0)
 				{
 					if(currentTile.left == null)	ghost.direction = Vector3.right; 
@@ -75,14 +64,10 @@ public class AI : MonoBehaviour {
 				
 			}
 			
-			//---------------------------------------------------------------------------------------
-			// Nếu đang ở giao lộ0o,.p/i0k0iiiiiiiiiiiiiiiiiiiiiiiiiii0k0
-			// calculate the distance to target from each available tile and choose the shortest one
+			//---------------------------------------------------------------------------------------//
+			// Nếu đang ở giao lộ nga 3, nga 4
 			if(currentTile.isIntersection)
 			{
-				
-
-
 				List<TileManager.Tile> open = new List<TileManager.Tile> ();
 				List<TileManager.Tile> close = new List<TileManager.Tile> ();
 				//khoi tao A*
@@ -100,9 +85,8 @@ public class AI : MonoBehaviour {
 							currentTile = open [i];
 						}
 					}
-					//Debug.Log ("Van con chay nek" + open.Count);
 					if (targetTile.x == currentTile.x && targetTile.y == currentTile.y) {
-						//Debug.Log ("Sai con me no roi" + currentTile.x + "" + currentTile.y);
+						Debug.Log ("Break");
 						break;
 					}
 					//thêm zô close and xóa trong open
@@ -111,20 +95,19 @@ public class AI : MonoBehaviour {
 					close.Add (currentTile);
 
 					//Tìm đỉnh kề cho tile hiện tại và them vào open
-					//currentTile has left, right, up, down. At least 3 relation exist
 					TileManager.Tile p = currentTile;
 
 					if (p.left != null) {
 						//hoac giao lo, hoac goc vuong
 						p = p.left;
-						while (p.adjacentCount < 2) {
+						/*while (p.adjacentCount < 2) {
 							//Debug.Log ("nga ba ben trai dau tien p:" + p.x + "" + p.y);
 							if (p.left == null) {
 								break;
 							} else {
 								p = p.left;
 							}
-						}
+						}*/
 
 						//kiem tra co close, open, phai co 3 cai if
 						//neu p chua co trong close va open
@@ -147,14 +130,13 @@ public class AI : MonoBehaviour {
 						}
 						//neu p ton tai trong close, co path ngan hon
 						if (close.Contains (p) && p.g > currentTile.g + manager.distance(currentTile, p)) {
-							Debug.Log ("Update close");
+							//Debug.Log ("Update close");
 							//break;
 							close.Remove (p);
 							p.g = manager.distance(currentTile, p) + p.before.g;
 							p.h = manager.distance(targetTile, p);
 							p.f = p.g + p.h;
 							p.before = currentTile;
-
 							open.Add (p);
 
 						}
@@ -164,14 +146,14 @@ public class AI : MonoBehaviour {
 					//Debug.Log ("adjacentCount p-right:" + p.adjacentCount);
 					if (p.right != null) {
 						p = p.right;
-						while (p.adjacentCount < 2) {
+						/*while (p.adjacentCount < 2) {
 							//Debug.Log ("nga ba ben phai dau tien p:" + p.right.x + "" + p.right.y);
 							if (p.right == null) {
 								break;
 							} else {
 								p = p.right;
 							}
-						}
+						}*/
 
 						//kiem tra co close, open, phai co 3 cai if
 						//neu p chua co trong close va open
@@ -195,19 +177,25 @@ public class AI : MonoBehaviour {
 						//neu p ton tai trong close, co path ngan hon
 						if (close.Contains (p) && p.g > currentTile.g + manager.distance(currentTile, p)) {
 							Debug.Log ("Update close");
+							close.Remove (p);
+							p.g = manager.distance(currentTile, p) + p.before.g;
+							p.h = manager.distance(targetTile, p);
+							p.f = p.g + p.h;
+							p.before = currentTile;
 
+							open.Add (p);
 						}
 					}
 					p = currentTile;
 					if (p.up != null) {
 						p = p.up;
-						while (p.adjacentCount < 2) {
+						/*while (p.adjacentCount < 2) {
 							if (p.up == null) {
 								break;
 							} else {
 								p = p.up;
 							}
-						}
+						}*/
 
 						//kiem tra co close, open, phai co 3 cai if
 						//neu p chua co trong close va open
@@ -230,19 +218,25 @@ public class AI : MonoBehaviour {
 						//neu p ton tai trong close, co path ngan hon
 						if (close.Contains (p) && p.g > currentTile.g + manager.distance(currentTile, p)) {
 							Debug.Log ("Update close");
+							close.Remove (p);
+							p.g = manager.distance(currentTile, p) + p.before.g;
+							p.h = manager.distance(targetTile, p);
+							p.f = p.g + p.h;
+							p.before = currentTile;
 
+							open.Add (p);
 						}
 					}
 					p = currentTile;
 					if (p.down != null) {
 						p = p.down;
-						while (p.adjacentCount < 2) {
+						/*while (p.adjacentCount < 2) {
 							if (p.down == null) {
 								break;
 							} else {
 								p = p.down;
 							}
-						}
+						}*/
 
 						//kiem tra co close, open, phai co 3 cai if
 						//neu p chua co trong close va open
@@ -265,7 +259,13 @@ public class AI : MonoBehaviour {
 						//neu p ton tai trong close, co path ngan hon
 						if (close.Contains (p) && p.g > currentTile.g + manager.distance(currentTile, p)) {
 							Debug.Log ("Update close");
+							close.Remove (p);
+							p.g = manager.distance(currentTile, p) + p.before.g;
+							p.h = manager.distance(targetTile, p);
+							p.f = p.g + p.h;
+							p.before = currentTile;
 
+							open.Add (p);
 						}
 					}
 
@@ -288,8 +288,7 @@ public class AI : MonoBehaviour {
 						ghost.direction = Vector3.left;
 					}
 				}
-
-				//code cũ của nó nè cô ahihi.....
+					
 				//manager.tiles
 				/*dist1 = dist2 = dist3 = dist4 = 999999f;
 				if(currentTile.up != null && !currentTile.up.occupied && !(ghost.direction.y < 0)) 		dist1 = manager.distance(currentTile.up, targetTile);
@@ -409,13 +408,13 @@ public class AI : MonoBehaviour {
 		switch(name)
 		{
 		case "blinky":	// target = pacman
-			targetPos = new Vector3 (target.position.x+0.499f, target.position.y+0.499f);
+			targetPos = new Vector3 (target.position.x, target.position.y);
 			targetTile = tiles[manager.Index((int)targetPos.x, (int)targetPos.y)];
 			break;
 		case "pinky":	// target = pacman + 4*pacman's direction (4 steps ahead of pacmann 
 			//don dau truoc 4 buoc cua pacman
 			dir = target.GetComponent<PlayerController>().getDir();//cho thang pacman dang dung
-			targetPos = new Vector3 (target.position.x+0.499f, target.position.y+0.499f) + 4*dir;
+			targetPos = new Vector3 (target.position.x, target.position.y) + 4*dir;
 
 			// if pacmans going up, not 4 ahead but 4 up and 4 left is the target
 			// so subtract 4 from X coord from target position
@@ -428,15 +427,15 @@ public class AI : MonoBehaviour {
 			dir = target.GetComponent<PlayerController> ().getDir ();
 			Vector3 blinkyPos = GameObject.Find ("blinky").transform.position;
 			Vector3 ambushVector = target.position + 2 * dir - blinkyPos;
-			targetPos = new Vector3 (target.position.x + 0.499f, target.position.y + 0.499f) + 2 * dir + ambushVector;
+			targetPos = new Vector3 (target.position.x, target.position.y) + 2 * dir + ambushVector;
 
-			Debug.Log ("target x = " + target.position.x + "target y = " + target.position.y);
-			Debug.Log ("blinkyPos x = " + blinkyPos.x + "blinkyPos y = " + blinkyPos.y);
-			Debug.Log ("ambushVector x = " + ambushVector.x + "ambushVector y = " + ambushVector.y);
+			//Debug.Log ("target x = " + target.position.x + "target y = " + target.position.y);
+			//Debug.Log ("blinkyPos x = " + blinkyPos.x + "blinkyPos y = " + blinkyPos.y);
+			//Debug.Log ("ambushVector x = " + ambushVector.x + "ambushVector y = " + ambushVector.y);
 			targetTile = tiles[manager.Index((int)targetPos.x, (int)targetPos.y)];
 			break;
 		case "clyde":
-			targetPos = new Vector3 (target.position.x+0.499f, target.position.y+0.499f);
+			targetPos = new Vector3 (target.position.x, target.position.y);
 			targetTile = tiles[manager.Index((int)targetPos.x, (int)targetPos.y)];
 			if(manager.distance(targetTile, currentTile) < 9)
 				targetTile = tiles[manager.Index (0, 2)];
