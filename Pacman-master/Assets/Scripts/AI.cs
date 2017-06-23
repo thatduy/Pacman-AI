@@ -100,15 +100,6 @@ public class AI : MonoBehaviour {
 					if (p.left != null) {
 						//hoac giao lo, hoac goc vuong
 						p = p.left;
-						/*while (p.adjacentCount < 2) {
-							//Debug.Log ("nga ba ben trai dau tien p:" + p.x + "" + p.y);
-							if (p.left == null) {
-								break;
-							} else {
-								p = p.left;
-							}
-						}*/
-
 						//kiem tra co close, open, phai co 3 cai if
 						//neu p chua co trong close va open
 						if (!open.Contains (p) && !close.Contains (p)) {
@@ -130,13 +121,12 @@ public class AI : MonoBehaviour {
 						}
 						//neu p ton tai trong close, co path ngan hon
 						if (close.Contains (p) && p.g > currentTile.g + manager.distance(currentTile, p)) {
-							//Debug.Log ("Update close");
-							//break;
 							close.Remove (p);
+							p.before = currentTile;
 							p.g = manager.distance(currentTile, p) + p.before.g;
 							p.h = manager.distance(targetTile, p);
 							p.f = p.g + p.h;
-							p.before = currentTile;
+
 							open.Add (p);
 
 						}
@@ -178,10 +168,10 @@ public class AI : MonoBehaviour {
 						if (close.Contains (p) && p.g > currentTile.g + manager.distance(currentTile, p)) {
 							Debug.Log ("Update close");
 							close.Remove (p);
+							p.before = currentTile;
 							p.g = manager.distance(currentTile, p) + p.before.g;
 							p.h = manager.distance(targetTile, p);
 							p.f = p.g + p.h;
-							p.before = currentTile;
 
 							open.Add (p);
 						}
@@ -219,10 +209,10 @@ public class AI : MonoBehaviour {
 						if (close.Contains (p) && p.g > currentTile.g + manager.distance(currentTile, p)) {
 							Debug.Log ("Update close");
 							close.Remove (p);
+							p.before = currentTile;
 							p.g = manager.distance(currentTile, p) + p.before.g;
 							p.h = manager.distance(targetTile, p);
 							p.f = p.g + p.h;
-							p.before = currentTile;
 
 							open.Add (p);
 						}
@@ -260,10 +250,10 @@ public class AI : MonoBehaviour {
 						if (close.Contains (p) && p.g > currentTile.g + manager.distance(currentTile, p)) {
 							Debug.Log ("Update close");
 							close.Remove (p);
+							p.before = currentTile;
 							p.g = manager.distance(currentTile, p) + p.before.g;
 							p.h = manager.distance(targetTile, p);
 							p.f = p.g + p.h;
-							p.before = currentTile;
 
 							open.Add (p);
 						}
@@ -404,7 +394,7 @@ public class AI : MonoBehaviour {
 		TileManager.Tile targetTile;
 		Vector3 dir;
 
-		// get the target tile position (round it down to int so we can reach with Index() function)
+
 		switch(name)
 		{
 		case "blinky":	// target = pacman
