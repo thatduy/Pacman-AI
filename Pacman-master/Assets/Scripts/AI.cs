@@ -398,13 +398,13 @@ public class AI : MonoBehaviour {
 		switch(name)
 		{
 		case "blinky":	// target = pacman
-			targetPos = new Vector3 (target.position.x, target.position.y);
+			targetPos = new Vector3 (target.position.x + 0.499f, target.position.y + 0.499f);
 			targetTile = tiles[manager.Index((int)targetPos.x, (int)targetPos.y)];
 			break;
 		case "pinky":	// target = pacman + 4*pacman's direction (4 steps ahead of pacmann 
 			//don dau truoc 4 buoc cua pacman
 			dir = target.GetComponent<PlayerController>().getDir();//cho thang pacman dang dung
-			targetPos = new Vector3 (target.position.x, target.position.y) + 4*dir;
+			targetPos = new Vector3 (target.position.x + 0.499f, target.position.y + 0.499f) + 4*dir;
 
 			// if pacmans going up, not 4 ahead but 4 up and 4 left is the target
 			// so subtract 4 from X coord from target position
@@ -417,7 +417,7 @@ public class AI : MonoBehaviour {
 			dir = target.GetComponent<PlayerController> ().getDir ();
 			Vector3 blinkyPos = GameObject.Find ("blinky").transform.position;
 			Vector3 ambushVector = target.position + 2 * dir - blinkyPos;
-			targetPos = new Vector3 (target.position.x, target.position.y) + 2 * dir + ambushVector;
+			targetPos = new Vector3 (target.position.x + 0.499f, target.position.y + 0.499f) + 2 * dir + ambushVector;
 
 			//Debug.Log ("target x = " + target.position.x + "target y = " + target.position.y);
 			//Debug.Log ("blinkyPos x = " + blinkyPos.x + "blinkyPos y = " + blinkyPos.y);
@@ -425,7 +425,7 @@ public class AI : MonoBehaviour {
 			targetTile = tiles[manager.Index((int)targetPos.x, (int)targetPos.y)];
 			break;
 		case "clyde":
-			targetPos = new Vector3 (target.position.x, target.position.y);
+			targetPos = new Vector3 (target.position.x + 0.499f, target.position.y + 0.499f);
 			targetTile = tiles[manager.Index((int)targetPos.x, (int)targetPos.y)];
 			if(manager.distance(targetTile, currentTile) < 9)
 				targetTile = tiles[manager.Index (0, 2)];
