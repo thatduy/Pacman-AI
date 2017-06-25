@@ -171,7 +171,7 @@ public class GameManager : MonoBehaviour {
     public void LoseLife()
     {
         lives--;
-		Debug.Log (lives);
+//		Debug.Log (lives);
         gameState = GameState.Dead;
     
         // update UI too

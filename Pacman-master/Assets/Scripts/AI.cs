@@ -86,7 +86,7 @@ public class AI : MonoBehaviour {
 						}
 					}
 					if (targetTile.x == currentTile.x && targetTile.y == currentTile.y) {
-						Debug.Log ("Break");
+						//Debug.Log ("Break");
 						break;
 					}
 					//thêm zô close and xóa trong open
@@ -308,7 +308,8 @@ public class AI : MonoBehaviour {
 		// toa do hien tai cua ghost
 		Vector3 currentPos = new Vector3(transform.position.x + 0.499f, transform.position.y + 0.499f);
 		currentTile = tiles[manager.Index ((int)currentPos.x, (int)currentPos.y)];
-
+		Vector3 targetPos = new Vector3 (target.position.x + 0.499f, target.position.y + 0.499f);
+		targetTile = tiles[manager.Index((int)targetPos.x, (int)targetPos.y)];
 		// get tile tiep theo dua vao huong di cua ghost hien tai
 		if(ghost.direction.x > 0)	nextTile = tiles[manager.Index ((int)(currentPos.x+1), (int)currentPos.y)];
 		if(ghost.direction.x < 0)	nextTile = tiles[manager.Index ((int)(currentPos.x-1), (int)currentPos.y)];
@@ -346,36 +347,27 @@ public class AI : MonoBehaviour {
 			{
 				//
 				float dist1, dist2, dist3, dist4;// khoảng cách
-				/*List<TileManager.Tile> availableTiles = new List<TileManager.Tile>();
-				TileManager.Tile chosenTile;
-				if(currentTile.up != null && !currentTile.up.occupied && !(ghost.direction.y < 0)) 			availableTiles.Add (currentTile.up);
-				if(currentTile.down != null && !currentTile.down.occupied &&  !(ghost.direction.y > 0)) 	availableTiles.Add (currentTile.down);	
-				if(currentTile.left != null && !currentTile.left.occupied && !(ghost.direction.x > 0)) 		availableTiles.Add (currentTile.left);
-				if(currentTile.right != null && !currentTile.right.occupied && !(ghost.direction.x < 0))	availableTiles.Add (currentTile.right);*/
+//				List<TileManager.Tile> availableTiles = new List<TileManager.Tile>();
+//				TileManager.Tile chosenTile;
+//				if(currentTile.up != null && !currentTile.up.occupied && !(ghost.direction.y < 0)) 			availableTiles.Add (currentTile.up);
+//				if(currentTile.down != null && !currentTile.down.occupied &&  !(ghost.direction.y > 0)) 	availableTiles.Add (currentTile.down);	
+//				if(currentTile.left != null && !currentTile.left.occupied && !(ghost.direction.x > 0)) 		availableTiles.Add (currentTile.left);
+//				if(currentTile.right != null && !currentTile.right.occupied && !(ghost.direction.x < 0))	availableTiles.Add (currentTile.right);
 				dist1 = dist2 = dist3 = dist4 = 0f;
-				if (currentTile.up != null && !currentTile.up.occupied && !(ghost.direction.y < 0) && targetTile != null) {
-					if (currentTile.up == null) {
-						Debug.Log ("currentTile.up == null");
-					}
-					if (targetTile == null) {
-						Debug.Log ("targetTile == null");
-					}
-					dist1 = manager.distance(currentTile.up, targetTile);
-				}
-					
-				if(currentTile.down != null && !currentTile.down.occupied &&  !(ghost.direction.y > 0) && targetTile != null) 	dist2 = manager.distance(currentTile.down, targetTile);
-				if(currentTile.left != null && !currentTile.left.occupied && !(ghost.direction.x > 0) && targetTile != null) 	dist3 = manager.distance(currentTile.left, targetTile);
-				if(currentTile.right != null && !currentTile.right.occupied && !(ghost.direction.x < 0) && targetTile != null)	dist4 = manager.distance(currentTile.right, targetTile);
+				if (currentTile.up != null && !currentTile.up.occupied && !(ghost.direction.y < 0) ) 		dist1 = manager.distance(currentTile.up, targetTile);
+				if(currentTile.down != null && !currentTile.down.occupied &&  !(ghost.direction.y > 0) ) 	dist2 = manager.distance(currentTile.down, targetTile);
+				if(currentTile.left != null && !currentTile.left.occupied && !(ghost.direction.x > 0) ) 	dist3 = manager.distance(currentTile.left, targetTile);
+				if(currentTile.right != null && !currentTile.right.occupied && !(ghost.direction.x < 0) )	dist4 = manager.distance(currentTile.right, targetTile);
 				
 				float max = Mathf.Max(dist1, dist2, dist3, dist4);
 				if(max == dist1) ghost.direction = Vector3.up;
 				if(max == dist2) ghost.direction = Vector3.down;
 				if(max == dist3) ghost.direction = Vector3.left;
 				if(max == dist4) ghost.direction = Vector3.right;
-				//int rand = Random.Range(0, availableTiles.Count);
-				//chosenTile = availableTiles[rand];
-				//ghost.direction = Vector3.Normalize(new Vector3(chosenTile.x - currentTile.x, chosenTile.y - currentTile.y, 0));
-				//Debug.Log (ghost.name + ": Chosen Tile (" + chosenTile.x + ", " + chosenTile.y + ")" );
+//				int rand = Random.Range(0, availableTiles.Count);
+//				chosenTile = availableTiles[rand];
+//				ghost.direction = Vector3.Normalize(new Vector3(chosenTile.x - currentTile.x, chosenTile.y - currentTile.y, 0));
+//				Debug.Log (ghost.name + ": Chosen Tile (" + chosenTile.x + ", " + chosenTile.y + ")" );
 			}
 			
 		}
@@ -426,9 +418,13 @@ public class AI : MonoBehaviour {
 			break;
 		case "clyde":
 			targetPos = new Vector3 (target.position.x + 0.499f, target.position.y + 0.499f);
-			targetTile = tiles[manager.Index((int)targetPos.x, (int)targetPos.y)];
-			if(manager.distance(targetTile, currentTile) < 9)
+			targetTile = tiles [manager.Index ((int)targetPos.x, (int)targetPos.y)];
+			if (manager.distance (targetTile, currentTile) < 9) {
 				targetTile = tiles[manager.Index (0, 2)];
+				//Debug.Log ("CLYDE" + targetTile.x + " " + targetTile.y);
+			}
+				
+				
 			break;
 		default:
 			targetTile = null;
